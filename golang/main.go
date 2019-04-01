@@ -2,11 +2,13 @@ package main
 
 import (
 	"net/http"
+	"log"
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/Xenobyte42/techdb/golang/handlers"
 	_ "github.com/Xenobyte42/techdb/golang/models"
+	"github.com/Xenobyte42/techdb/golang/api"
 )
 
 func initForumRouting(r *mux.Router) {
@@ -54,6 +56,19 @@ func initRouting() *mux.Router {
 }
 
 func main() {
+	err := api.Db.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print("Succesfully connected")
+	defer api.Db.Close()
+
+	err = api.Db.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Print("Succesfully inited. Start listening...")
 	router := initRouting()
 
 	http.ListenAndServe(":5000", router)

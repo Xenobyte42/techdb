@@ -1,7 +1,7 @@
 package models
 
 import (
-	"encoding/json"
+	_ "encoding/json"
 )
 
 type ForumModel struct {
