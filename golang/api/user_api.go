@@ -40,3 +40,37 @@ func (self *Database) GetUserData(data *models.UserModel, nickname string) (bool
 		return true, nil
 	}
 }
+
+func (self *Database) CheckEmail(data *models.UserUpdate, nickname string) (bool, error) {
+	sqlStatement := `SELECT nickname FROM Users WHERE email=$1`
+	var selectedNick string
+
+	err := self.db.QueryRow(sqlStatement, data.Email).Scan(&selectedNick)
+	switch {
+	case err == sql.ErrNoRows:
+		return false, nil
+	case err != nil:
+		return false, err
+	default:
+		return selectedNick != nickname, nil
+	}
+}
+
+func (self *Database) UpdateData(data *models.UserUpdate, 
+	  nickname string, response *models.UserModel) (bool, error) {
+	sqlStatement := `UPDATE Users SET email=$1, fullname=$2, about=$3 WHERE nickname=$4
+	RETURNING about, email, fullname, nickname
+	`
+
+	err := self.db.QueryRow(sqlStatement, data.Email,
+		data.Fullname, data.About, nickname).Scan(&response.About,
+		&response.Email, &response.Fullname, &response.Nickname)
+	switch {
+	case err == sql.ErrNoRows:
+		return false, nil
+	case err != nil:
+		return false, err
+	default:
+		return true, nil
+	}
+}

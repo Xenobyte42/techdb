@@ -67,8 +67,42 @@ func UserGetInfo(w http.ResponseWriter, r *http.Request) {
 	w.Write(body)
 }
 
+/*
+curl -X POST -H "Content-Type: application/json" \
+ -d '{"about": "This is the day you will always remember as the day that you almost caught Captain Jack Sparrow!","email": "captaina@blackpearl.sea","fullname": "Captain Jack Sparrow"}' \
+ http://localhost:5000/user/vasya/profile
+*/
+
 func UserUpdateInfo(w http.ResponseWriter, r *http.Request) {
 	nickname := mux.Vars(r)["nickname"]
-	_ = nickname
-	w.WriteHeader(http.StatusOK)
+	requestData := &models.UserUpdate{}
+	err := utils.GetData(requestData, r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	exists, err := api.Db.CheckEmail(requestData, nickname)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if exists {
+		utils.RespondError(w, http.StatusConflict, "New data conflict with other user")
+		return
+	}
+
+	responseData := &models.UserModel{}
+	exists, err = api.Db.UpdateData(requestData, nickname, responseData)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if !exists {
+		utils.RespondError(w, http.StatusNotFound, "User is gone")
+		return
+	}
+
+	body, _ := json.Marshal(responseData)
+	w.Write(body)
 }
