@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"net/http"
+
+	_ "github.com/gorilla/mux"
 )
 
 func ClearDatabase(w http.ResponseWriter, r *http.Request) {
