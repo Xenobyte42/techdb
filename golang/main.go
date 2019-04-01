@@ -1,14 +1,13 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 
+	"github.com/Xenobyte42/techdb/golang/api"
+	"github.com/Xenobyte42/techdb/golang/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
-	"github.com/Xenobyte42/techdb/golang/handlers"
-	_ "github.com/Xenobyte42/techdb/golang/models"
-	"github.com/Xenobyte42/techdb/golang/api"
 )
 
 func initForumRouting(r *mux.Router) {

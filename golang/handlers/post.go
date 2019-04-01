@@ -17,4 +17,3 @@ func PostUpdateDetails(w http.ResponseWriter, r *http.Request) {
 	_ = messageId
 	w.WriteHeader(http.StatusOK)
 }
-

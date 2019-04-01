@@ -8,7 +8,7 @@ const (
 	    email TEXT NOT NULL UNIQUE,
 	    fullname TEXT NOT NULL,
 	    nickname TEXT NOT NULL UNIQUE 
-	);
+	)
 	`
 
 	forumSchema = `
@@ -18,7 +18,7 @@ const (
 		title TEXT NOT NULL,
 		user_id INTEGER NOT NULL,
 		FOREIGN KEY (user_id) REFERENCES Users (id)
-	);
+	)
 	`
 
 	threadSchema = `
@@ -32,7 +32,7 @@ const (
 		title TEXT NOT NULL,
 		FOREIGN KEY (author_id) REFERENCES Users (id),
 		FOREIGN KEY (forum_id) REFERENCES Forums (id)
-	);
+	)
 	`
 
 	voteSchema = `
@@ -42,7 +42,7 @@ const (
 		voice INTEGER CHECK (voice = -1 OR voice = 1),
 		FOREIGN KEY (user_id) REFERENCES Users (id),
 		FOREIGN KEY (thread_id) REFERENCES Threads (id)
-	);
+	)
 	`
 
 	postSchema = `
@@ -56,10 +56,11 @@ const (
 		thread_id INTEGER NOT NULL,
 		FOREIGN KEY (author_id) REFERENCES Users (id),
 		FOREIGN KEY (thread_id) REFERENCES Threads (id)
-	);
+	)
 	`
 )
 
 var (
+	tables  = [...]string{"Users", "Forums", "Threads", "Votes", "Posts"}
 	schemas = [...]string{userSchema, forumSchema, threadSchema, voteSchema, postSchema}
 )

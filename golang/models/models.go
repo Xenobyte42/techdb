@@ -55,7 +55,7 @@ type UserUpdate struct {
 }
 
 type DatabaseStatus struct {
-	Forum  int32 `json:"number"`
+	Forum  int32 `json:"forum"`
 	Post   int64 `json:"post"`
 	Thread int32 `json:"thread"`
 	User   int32 `json:"user"`
